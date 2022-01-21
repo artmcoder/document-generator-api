@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;" charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+<body>
+
+<div style="text-align: center;">
+    <h2 style="line-height: 0.3">УВЕДОМЛЕНИЕ</h2>
+    <h2>О ВЫДАЧЕ РАЗРЕШЕНИЯ</h2>
+</div>
+<br/>
+<table class="text">
+    <tr>
+        <td th:text="${document.date}"/>
+        <td style="text-align: right;" th:text="'№ ' + ${document.number}"/>
+    </tr>
+</table>
+<br/>
+<br/>
+<div style="text-align: center">
+    <span th:text="${document.fullName}"/>
+    <hr/>
+    <span style="font-size: 10px">(наименование юридического лица или Ф.И.О. индивидуального предпринимателя)</span>
+</div>
+<br/>
+<div th:each="line: ${documentText}">
+    <p th:text="${line}"/>
+</div>
+<br/>
+<div style="text-align: right">
+    <img th:src="${signaturePath}" height="45"/>
+</div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+@font-face {
+    src: url('static/fonts/calibri.ttf');
+    -fs-pdf-font-embed: embed;
+    -fs-pdf-font-encoding: Identity-H;
+}
+
+body {
+    font-size: 11pt;
+    font-family: Calibri, serif;
+}
+
+table.text {
+    width: 100%;
+    border-spacing: 0;
+}
+
+table.text td {
+    width: 50%;
+    vertical-align: top;
+}
