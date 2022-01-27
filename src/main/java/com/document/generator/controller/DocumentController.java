@@ -1,6 +1,9 @@
 package com.document.generator.controller;
 
+import com.document.generator.dto.DocumentDTO;
 import com.document.generator.service.DocumentService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lowagie.text.DocumentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,9 +27,10 @@ public class DocumentController {
     @PostMapping("generate")
     public void generateDocument(@RequestParam("document") String documentInJson,
                                  @RequestParam("signature") MultipartFile signatureInMultipartFile,
-                                 HttpServletResponse response) {
+                                 HttpServletResponse response) throws JsonProcessingException {
+        DocumentDTO documentDTO = new ObjectMapper().readValue(documentInJson, DocumentDTO.class);
         try {
-            Path file = Paths.get(documentService.generatePdf(documentInJson, signatureInMultipartFile).getAbsolutePath());
+            Path file = Paths.get(documentService.generatePdf(documentDTO, signatureInMultipartFile).getAbsolutePath());
             if (Files.exists(file)) {
                 response.setContentType("application/pdf");
                 response.addHeader("Content-Disposition", "attachment; filename=" + file.getFileName());

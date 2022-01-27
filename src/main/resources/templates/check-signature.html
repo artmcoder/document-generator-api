@@ -13,25 +13,27 @@
 <br/>
 <table class="text">
     <tr>
-        <td th:text="${document.date}"/>
-        <td style="text-align: right;" th:text="'№ ' + ${document.number}"/>
+        <td>12 августа 2021</td>
+        <td style="text-align: right;">20</td>
     </tr>
 </table>
 <br/>
 <br/>
 <div style="text-align: center">
-    <span th:text="${document.fullName}"/>
+    <span>Иванов Иван Иванович</span>
     <hr/>
     <span style="font-size: 10px">(наименование юридического лица или Ф.И.О. индивидуального предпринимателя)</span>
 </div>
 <br/>
 <div>
-    <p th:each="lineNumber : ${#numbers.sequence(0, documentTextLength)}" th:text="${documentText[lineNumber]}"/>
-    <div th:if="${paragraphBreak}"><br/><br/><br/></div>
-    <p th:text="${lastLine}"/>
+    <p th:each="line: ${documentText}" th:text="${line}"/>
 </div>
 <br/>
-<div style="text-align: right">
+<div style="text-align: right" th:if="${checkType.equals('SIGNATURE')}">
+    <img th:src="${signaturePath}" height="45"/>
+</div>
+<div style="text-align: right" th:if="${checkType.equals('DOUBLE_SIGNATURE')}">
+    <img th:src="${signaturePath}" height="45"/>
     <img th:src="${signaturePath}" height="45"/>
 </div>
 </body>

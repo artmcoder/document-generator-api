@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.w3c.dom.Document;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.File;
@@ -27,15 +26,17 @@ import java.nio.file.Paths;
 @Slf4j
 @RequiredArgsConstructor
 public class DocumentService {
-    @Value("${application.domain}")
-    private String domain;
     private static final String PDF_RESOURCES = "/static/";
     private final SpringTemplateEngine templateEngine;
+    private final SignatureCheckService signatureCheckService;
+    @Value("${application.domain}")
+    private String domain;
 
-    public File generatePdf(String documentInJson, MultipartFile signatureInMultipartFile) throws IOException, DocumentException {
+    public File generatePdf(DocumentDTO documentDTO, MultipartFile signatureInMultipartFile) throws IOException, DocumentException {
         saveSignature(signatureInMultipartFile);
-        DocumentDTO documentDTO = new ObjectMapper().readValue(documentInJson, DocumentDTO.class);
-         String html = loadAndFillTemplate(getContext(documentDTO));
+        boolean paragraphBreak = signatureCheckService.checkSignature(documentDTO.getDocumentText().split("\n"));
+        System.out.println(paragraphBreak);
+        String html = loadAndFillTemplate(getContext(documentDTO, paragraphBreak));
         log.info("Generating new document with number: {}", documentDTO.getNumber());
         File document = renderPdf(html);
         new File("src/main/resources/static/images/signature.png").delete();
@@ -68,12 +69,16 @@ public class DocumentService {
         return templateEngine.process("pdf-doc", context);
     }
 
-    private Context getContext(DocumentDTO documentDTO) {
+    private Context getContext(DocumentDTO documentDTO, boolean paragraphBreak) {
         Context context = new Context();
         String[] documentText = documentDTO.getDocumentText().split("\n");
         context.setVariable("document", documentDTO);
         context.setVariable("documentText", documentText);
+        context.setVariable("documentTextLength", documentText.length-1);
+        context.setVariable("lastLine", documentText[documentText.length-1]);
         context.setVariable("signaturePath", domain + "api/v1/documents/signature/signature.png");
+        context.setVariable("paragraphBreak", paragraphBreak);
         return context;
     }
 }
+
