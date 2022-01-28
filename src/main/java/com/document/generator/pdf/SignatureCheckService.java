@@ -1,6 +1,5 @@
-package com.document.generator.service;
+package com.document.generator.pdf;
 
-import com.document.generator.dto.DocumentDTO;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
 import lombok.RequiredArgsConstructor;
@@ -22,29 +21,14 @@ public class SignatureCheckService {
     private static final String PDF_RESOURCES = "/static/";
     private final SpringTemplateEngine templateEngine;
     @Value("${application.domain}")
-    private String domain;
+    private String applicationDomain;
 
-    public boolean checkSignature(String[] documentText) throws IOException, DocumentException {
-        int pagesCountWithoutSignature = getPagesCount(getHtml(documentText, CheckType.WITHOUT_SIGNATURE));
-        int pagesCountWithSignature = getPagesCount(getHtml(documentText, CheckType.SIGNATURE));;
-        int pagesCountWithDoubleSignature = getPagesCount(getHtml(documentText, CheckType.DOUBLE_SIGNATURE));
-        System.out.println(pagesCountWithDoubleSignature);
-        System.out.println(pagesCountWithoutSignature);
-        System.out.println(pagesCountWithSignature);
-        if ((pagesCountWithoutSignature == pagesCountWithSignature) && (pagesCountWithSignature == pagesCountWithDoubleSignature)) return false;
-        else return true;
-    }
-
-    private String getHtml(String[] documentText, CheckType checkType) {
-        Context context = new Context();
-        context.setVariable("checkType", checkType.toString());
-        context.setVariable("documentText", documentText);
-        context.setVariable("signaturePath", domain + "api/v1/documents/signature/signature.png");
-        return loadAndFillTemplate(context);
-    }
-
-    private String loadAndFillTemplate(Context context) {
-        return templateEngine.process("check-signature", context);
+    public boolean checkSignature(String documentText) throws IOException, DocumentException {
+        String[] documentTextLines = documentText.split("\n");
+        int pagesCountWithoutSignature = getPagesCount(getHtml(documentTextLines, CheckType.WITHOUT_SIGNATURE));
+        int pagesCountWithSignature = getPagesCount(getHtml(documentTextLines, CheckType.SIGNATURE));
+        int pagesCountWithDoubleSignature = getPagesCount(getHtml(documentTextLines, CheckType.DOUBLE_SIGNATURE));
+        return (pagesCountWithoutSignature != pagesCountWithSignature) || (pagesCountWithSignature != pagesCountWithDoubleSignature);
     }
 
     private int getPagesCount(String html) throws IOException, DocumentException {
@@ -57,5 +41,13 @@ public class SignatureCheckService {
         renderer.createPDF(outputStream);
         outputStream.close();
         return renderer.getWriter().getPageNumber();
+    }
+
+    private String getHtml(String[] documentText, CheckType checkType) {
+        Context context = new Context();
+        context.setVariable("checkType", checkType.toString());
+        context.setVariable("documentText", documentText);
+        context.setVariable("signaturePath", applicationDomain + "api/v1/documents/signature/signature.png");
+        return templateEngine.process("check-signature", context);
     }
 }

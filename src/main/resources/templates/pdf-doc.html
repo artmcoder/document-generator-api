@@ -5,33 +5,33 @@
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
 </head>
 <body>
-
-<div style="text-align: center;">
-    <h2 style="line-height: 0.3">УВЕДОМЛЕНИЕ</h2>
+<div class="center">
+    <h2 class="title-line-height">УВЕДОМЛЕНИЕ</h2>
     <h2>О ВЫДАЧЕ РАЗРЕШЕНИЯ</h2>
 </div>
 <br/>
-<table class="text">
+<table class="date-number">
     <tr>
         <td th:text="${document.date}"/>
-        <td style="text-align: right;" th:text="'№ ' + ${document.number}"/>
+        <td class="right" th:text="'№ ' + ${document.number}"/>
     </tr>
 </table>
-<br/>
-<br/>
-<div style="text-align: center">
-    <span th:text="${document.fullName}"/>
-    <hr/>
-    <span style="font-size: 10px">(наименование юридического лица или Ф.И.О. индивидуального предпринимателя)</span>
+<br/><br/>
+<div class="center">
+    <span th:text="${document.fullName}"/><hr/>
+    <span class="small-text">(наименование юридического лица или Ф.И.О. индивидуального предпринимателя)</span>
 </div>
 <br/>
-<div>
+<div th:if="${!paragraphBreak}">
+    <p th:each="line : ${documentText}" th:text="${line}"/>
+</div>
+<div th:if="${paragraphBreak}">
     <p th:each="lineNumber : ${#numbers.sequence(0, documentTextLength)}" th:text="${documentText[lineNumber]}"/>
-    <div th:if="${paragraphBreak}"><br/><br/><br/></div>
+    <br/><br/><br/><br/>
     <p th:text="${lastLine}"/>
 </div>
 <br/>
-<div style="text-align: right">
+<div class="right">
     <img th:src="${signaturePath}" height="45"/>
 </div>
 </body>

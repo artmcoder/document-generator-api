@@ -9,12 +9,28 @@ body {
     font-family: Calibri, serif;
 }
 
-table.text {
+.center {
+    text-align: center;
+}
+
+.right {
+    text-align: right;
+}
+
+.title-line-height {
+    line-height: 0.3;
+}
+
+table.date-number {
     width: 100%;
     border-spacing: 0;
 }
 
-table.text td {
+table.date-number td {
     width: 50%;
     vertical-align: top;
+}
+
+.small-text {
+    font-size: 10px;
 }

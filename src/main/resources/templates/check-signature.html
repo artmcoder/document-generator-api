@@ -5,35 +5,32 @@
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
 </head>
 <body>
-
-<div style="text-align: center;">
-    <h2 style="line-height: 0.3">УВЕДОМЛЕНИЕ</h2>
+<div class="center">
+    <h2 class="title-line-height">УВЕДОМЛЕНИЕ</h2>
     <h2>О ВЫДАЧЕ РАЗРЕШЕНИЯ</h2>
 </div>
 <br/>
-<table class="text">
+<table class="date-number">
     <tr>
         <td>12 августа 2021</td>
         <td style="text-align: right;">20</td>
     </tr>
 </table>
-<br/>
-<br/>
-<div style="text-align: center">
-    <span>Иванов Иван Иванович</span>
-    <hr/>
-    <span style="font-size: 10px">(наименование юридического лица или Ф.И.О. индивидуального предпринимателя)</span>
+<br/><br/>
+<div class="center">
+    <span>Иванов Иван Иванович</span><hr/>
+    <span class="small-text">(наименование юридического лица или Ф.И.О. индивидуального предпринимателя)</span>
 </div>
 <br/>
 <div>
     <p th:each="line: ${documentText}" th:text="${line}"/>
 </div>
 <br/>
-<div style="text-align: right" th:if="${checkType.equals('SIGNATURE')}">
+<div class="right" th:if="${checkType.equals('SIGNATURE')}">
     <img th:src="${signaturePath}" height="45"/>
 </div>
-<div style="text-align: right" th:if="${checkType.equals('DOUBLE_SIGNATURE')}">
-    <img th:src="${signaturePath}" height="45"/>
+<div class="right" th:if="${checkType.equals('DOUBLE_SIGNATURE')}">
+    <img th:src="${signaturePath}" height="45"/><br/>
     <img th:src="${signaturePath}" height="45"/>
 </div>
 </body>
