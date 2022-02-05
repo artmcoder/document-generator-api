@@ -13,6 +13,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Document service. It generating pdf documents
+ * @author Artem Yakunin
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class DocumentServiceImpl implements DocumentService {

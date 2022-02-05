@@ -18,6 +18,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * Use this class to generate pdf document
+ * @author Artem Yakunin
+ * @version 1.0
+ */
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -29,6 +34,14 @@ public class DocumentGenerator {
     @Value("${application.domain}")
     private String applicationDomain;
 
+    /**
+     * Generate document function
+     * @param documentDTO
+     * @param signatureInMultipartFile
+     * @return
+     * @throws IOException
+     * @throws DocumentException
+     */
     public File generateDocument(DocumentDTO documentDTO, MultipartFile signatureInMultipartFile) throws IOException, DocumentException {
         signatureProvider.saveSignature(signatureInMultipartFile);
         boolean paragraphBreak = signatureCheckService.checkSignature(documentDTO.getDocumentText());
@@ -37,6 +50,13 @@ public class DocumentGenerator {
         return renderPdf(documentInHtml);
     }
 
+    /**
+     * Create document function
+     * @param html
+     * @return
+     * @throws IOException
+     * @throws DocumentException
+     */
     private File renderPdf(String html) throws IOException, DocumentException {
         File file = File.createTempFile("document", ".pdf");
         OutputStream outputStream = new FileOutputStream(file);
@@ -49,6 +69,12 @@ public class DocumentGenerator {
         return file;
     }
 
+    /**
+     * Get thymeleaf context function
+     * @param documentDTO
+     * @param paragraphBreak
+     * @return
+     */
     private Context getContext(DocumentDTO documentDTO, boolean paragraphBreak) {
         Context context = new Context();
         String[] documentText = documentDTO.getDocumentText().split("\n");

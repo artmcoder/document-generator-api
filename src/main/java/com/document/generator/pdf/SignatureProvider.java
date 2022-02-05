@@ -9,6 +9,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * User this class to save signature
+ * @author Artem Yakunin
+ * @version 1.0
+ */
 @Component
 public class SignatureProvider {
     public void saveSignature(MultipartFile signature) {

@@ -18,12 +18,25 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This is a controller with which you can generate a pdf document based on the data that was transferred to the DTO object and the signature in the form of a photo
+ * @author Artem Yakunin
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("api/v1/documents")
 @RequiredArgsConstructor
 public class DocumentController {
     private final DocumentService documentService;
 
+    /**
+     * Use this request to generate pdf document
+     * @param documentInJson
+     * @param signatureInMultipartFile
+     * @param response
+     * @throws IOException
+     * @throws DocumentException
+     */
     @PostMapping("generate")
     public void generateDocument(@RequestParam("document") String documentInJson,
                                  @RequestParam("signature") MultipartFile signatureInMultipartFile,
@@ -32,6 +45,12 @@ public class DocumentController {
         streamReport(response, documentService.generateDocument(documentDTO, signatureInMultipartFile));
     }
 
+    /**
+     * This function just download pdf document
+     * @param response
+     * @param document
+     * @throws IOException
+     */
     private void streamReport(HttpServletResponse response, Path document) throws IOException {
         response.setContentType("application/pdf");
         response.setHeader("Content-disposition", "attachment; filename=" + document.getFileName());
@@ -39,6 +58,11 @@ public class DocumentController {
         response.getOutputStream().flush();
     }
 
+    /**
+     * Exception handler
+     * @param exception
+     * @return
+     */
     @ExceptionHandler
     public ResponseEntity<Map<String, String>> handleException(JsonProcessingException exception) {
         Map<String, String> errorMap = new HashMap<>();
