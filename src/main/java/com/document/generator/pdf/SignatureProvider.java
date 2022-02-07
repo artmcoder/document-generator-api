@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 @Component
 public class SignatureProvider {
     public void saveSignature(MultipartFile signature) {
-        Path signaturePath = Paths.get("src/main/resources/static/images/", "signature.png");
+        Path signaturePath = Paths.get("src/main/resources/static/", "signature.png");
         try (OutputStream os = Files.newOutputStream(signaturePath)) {
             os.write(signature.getBytes());
         } catch (IOException e) {

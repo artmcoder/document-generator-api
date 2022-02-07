@@ -26,7 +26,7 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public Path generateDocument(DocumentDTO documentDTO, MultipartFile signature) throws  IOException, DocumentException {
         Path document = Paths.get(documentGenerator.generateDocument(documentDTO, signature).getAbsolutePath());
-        Files.delete(Paths.get("src/main/resources/static/images/signature.png"));
+        Files.delete(Paths.get("src/main/resources/static/signature.png"));
         return document;
     }
 }
